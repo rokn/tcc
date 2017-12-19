@@ -1,0 +1,55 @@
+-- This file has been generated from package.yaml by hpack version 0.17.1.
+--
+-- see: https://github.com/sol/hpack
+
+name:           tcc
+version:        0.1.0.0
+synopsis:       Short description of your package
+description:    Please see the README on Github at <https://github.com/rokn/tcc#readme>
+homepage:       https://github.com/rokn/tcc#readme
+bug-reports:    https://github.com/rokn/tcc/issues
+author:         Antonio Mindov
+maintainer:     amindov98@gmail.com
+copyright:      Antonio Mindov
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+cabal-version:  >= 1.10
+
+extra-source-files:
+    ChangeLog.md
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/rokn/tcc
+
+library
+  hs-source-dirs:
+      src
+  build-depends:
+      base >= 4.7 && < 5
+  exposed-modules:
+      Lib
+  default-language: Haskell2010
+
+executable tcc-exe
+  main-is: Main.hs
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >= 4.7 && < 5
+    , tcc
+  default-language: Haskell2010
+
+test-suite tcc-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >= 4.7 && < 5
+    , tcc
+  default-language: Haskell2010
