@@ -1,11 +1,14 @@
--- This file has been generated from package.yaml by hpack version 0.17.1.
+-- This file has been generated from package.yaml by hpack version 0.20.0.
 --
 -- see: https://github.com/sol/hpack
+--
+-- hash: 7d8bde3507fdc88d8af0c03f6bae3ee21f1aef27e66c1868c34df6a697fe2784
 
 name:           tcc
 version:        0.1.0.0
-synopsis:       Short description of your package
+synopsis:       C compiler
 description:    Please see the README on Github at <https://github.com/rokn/tcc#readme>
+category:       Compiler
 homepage:       https://github.com/rokn/tcc#readme
 bug-reports:    https://github.com/rokn/tcc/issues
 author:         Antonio Mindov
@@ -28,9 +31,13 @@ library
   hs-source-dirs:
       src
   build-depends:
-      base >= 4.7 && < 5
+      base >=4.7 && <5
   exposed-modules:
-      Lib
+      TccCore.Keyword
+      TccCore.Lexer
+      TccCore.Token
+  other-modules:
+      Paths_tcc
   default-language: Haskell2010
 
 executable tcc-exe
@@ -39,17 +46,23 @@ executable tcc-exe
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >= 4.7 && < 5
+      base >=4.7 && <5
     , tcc
+  other-modules:
+      Paths_tcc
   default-language: Haskell2010
 
 test-suite tcc-test
   type: exitcode-stdio-1.0
-  main-is: Spec.hs
+  main-is: LexTests.hs
   hs-source-dirs:
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >= 4.7 && < 5
+      base >=4.7 && <5
+    , tasty
+    , tasty-hunit
     , tcc
+  other-modules:
+      Paths_tcc
   default-language: Haskell2010

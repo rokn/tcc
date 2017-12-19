@@ -11,8 +11,8 @@ extra-source-files:
 - ChangeLog.md
 
 # Metadata used when publishing your package
-synopsis:            Short description of your package
-# category:            Web
+synopsis:            C compiler
+category:            Compiler
 
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
@@ -38,7 +38,7 @@ executables:
 
 tests:
   tcc-test:
-    main:                Spec.hs
+    main:                LexTests.hs
     source-dirs:         test
     ghc-options:
     - -threaded
@@ -46,3 +46,5 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - tcc
+    - tasty
+    - tasty-hunit
