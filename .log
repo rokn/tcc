@@ -1,8 +1,0 @@
-tcc-0.1.0.0: test (suite: tcc-test)
-
-
-tcc-0.1.0.0: Test suite tcc-test failed
-Test suite failure for package tcc-0.1.0.0
-    tcc-test:  exited with: ExitFailure 1
-Logs printed to console
-

@@ -1,18 +1,35 @@
 module Main where
 
 import TccCore.Lexer
+import TccCore.Token
 
 import Test.Tasty
 import Test.Tasty.HUnit
 
 main :: IO ()
 main = do
-    defaultMain(testGroup "Lexer tests" [dummyTest, lexerTest])
+    defaultMain(unitTests)
 
-dummyTest :: TestTree
-dummyTest = testCase "Testing a dummy 5==5"
-    (assertEqual "5 should be equal to 5" 6 3)
+minimalProgram = "int main(){}"
+minimalTokens =
+    [
+    Identifier "int",
+    Identifier "main",
+    OpenParenthesis,
+    CloseParenthesis,
+    OpenBrace,
+    CloseBrace
+    ]
 
-lexerTest :: TestTree
-lexerTest = testCase "Testing a lexer"
-    (assertEqual "5 should be equal to 5" 5 5)
+unitTests = testGroup "Unit tests"
+  [ testCase "Minimal program" $
+      assertEqual "Lexer should give correct tokens"
+        minimalTokens
+        (tccLex minimalProgram)
+
+  -- the following test does not hold
+  , testCase "Identifier int" $
+      assertEqual "Lexer should give correct tokens"
+        [Identifier "int"]
+        (tccLex "int")
+  ]
