@@ -10,5 +10,5 @@ data Token =
       | SemiColon
       | Identifier String
       | KeywordToken Keyword
-      | Literal String
+      | NumberLiteral String
       deriving(Show, Eq)

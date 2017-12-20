@@ -35,6 +35,7 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - tcc
+    - regex-posix
 
 tests:
   tcc-test:
