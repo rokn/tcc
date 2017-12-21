@@ -21,9 +21,11 @@ description:         Please see the README on Github at <https://github.com/rokn
 
 dependencies:
 - base >= 4.7 && < 5
+- regex-posix
 
 library:
   source-dirs: src
+
 
 executables:
   tcc-exe:
@@ -35,7 +37,6 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - tcc
-    - regex-posix
 
 tests:
   tcc-test:

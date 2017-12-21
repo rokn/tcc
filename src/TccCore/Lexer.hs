@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module TccCore.Lexer
     (
     tccLex
@@ -6,7 +8,9 @@ module TccCore.Lexer
 import TccCore.Token
 import TccCore.Keyword
 import TccCore.Helpers
+
 import Text.Regex.Posix
+
 
 splitters = "(){}; "
 
@@ -23,6 +27,7 @@ tccLex [] = []
 tccLex code = lexSplitted (code `splitBy` splitters)
 
 lexSplitted :: [String] -> [Token]
+lexSplitted [] = []
 lexSplitted (" " : rest) = lexSplitted rest
 lexSplitted (""  : rest) = lexSplitted rest
 lexSplitted ("{" : rest) = OpenBrace        : lexSplitted rest
@@ -31,7 +36,7 @@ lexSplitted ("(" : rest) = OpenParenthesis  : lexSplitted rest
 lexSplitted (")" : rest) = CloseParenthesis : lexSplitted rest
 lexSplitted (";" : rest) = SemiColon        : lexSplitted rest
 lexSplitted (lx  : rest)
-  | isKeyword    = KeywordToken (Just keyword) : lexSplitted rest
+  | isKeyword    = KeywordToken keyword : lexSplitted rest
   | isIdentifier = Identifier identifier       : lexSplitted rest
   | isLiteral    = NumberLiteral literal       : lexSplitted rest
   where (isKeyword, keyword)       = checkForKeyword lx
@@ -39,9 +44,9 @@ lexSplitted (lx  : rest)
         (isLiteral, literal)       = checkForLiteral lx
 
 checkForKeyword lexeme = checkForKeyword' keywordRegexes
-    where checkForKeyword' [] = (False, Nothing)
+    where checkForKeyword' [] = (False, Return)
           checkForKeyword' ((keyword,pat):pats)
-            | ((lexeme =~ pat)::Bool) = (True, Just keyword)
+            | ((lexeme =~ pat)::Bool) = (True, keyword)
             | otherwise = checkForKeyword' pats
 
 checkForIdentifier lexeme = ((lexeme =~ identifierPattern) :: Bool, lexeme)

@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 12bb9cc1c162fe83b77a2de59a2299edeaf5593b4756aaa9a8c9823118b3630e
+-- hash: 78bdb58449133890f97255bd51455f75298c3af0f306327ceda116a6bb32e31a
 
 name:           tcc
 version:        0.1.0.0
@@ -32,6 +32,7 @@ library
       src
   build-depends:
       base >=4.7 && <5
+    , regex-posix
   exposed-modules:
       TccCore.Helpers
       TccCore.Keyword
@@ -45,7 +46,7 @@ executable tcc-exe
   main-is: Main.hs
   hs-source-dirs:
       app
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N -XFlexibleContexts
   build-depends:
       base >=4.7 && <5
     , regex-posix
@@ -62,6 +63,7 @@ test-suite tcc-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , regex-posix
     , tasty
     , tasty-hunit
     , tcc

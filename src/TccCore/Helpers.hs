@@ -8,6 +8,6 @@ splitBy str splits = splitBy' (span findSplitter str)
     where findSplitter = not . ((flip elem) splits)
           splitBy' (splitted, splitter:rest) =
               splitted : [splitter] : splitBy rest splits
-          splitBy' (_, []) = []
+          splitBy' (splitted, []) = [splitted]
 
 
