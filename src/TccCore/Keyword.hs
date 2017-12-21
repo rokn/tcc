@@ -5,4 +5,4 @@ data Keyword = Return
 
 allKeywords = [(minBound :: Keyword) ..]
 
-getKeywordRegex Return = "return"
+getKeywordRegex Return = "^return$"

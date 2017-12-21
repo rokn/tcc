@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 78bdb58449133890f97255bd51455f75298c3af0f306327ceda116a6bb32e31a
+-- hash: 0094f7c2174773f24a8029dd119b5ddd2b68c8088a63f06d28616b8b405a1d29
 
 name:           tcc
 version:        0.1.0.0
@@ -46,7 +46,7 @@ executable tcc-exe
   main-is: Main.hs
   hs-source-dirs:
       app
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N -XFlexibleContexts
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N -fwarn-incomplete-patterns
   build-depends:
       base >=4.7 && <5
     , regex-posix
@@ -57,7 +57,7 @@ executable tcc-exe
 
 test-suite tcc-test
   type: exitcode-stdio-1.0
-  main-is: LexTests.hs
+  main-is: TestLauncher.hs
   hs-source-dirs:
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
@@ -68,5 +68,6 @@ test-suite tcc-test
     , tasty-hunit
     , tcc
   other-modules:
+      LexTests
       Paths_tcc
   default-language: Haskell2010

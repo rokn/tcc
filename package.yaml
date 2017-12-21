@@ -35,12 +35,13 @@ executables:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+    - -fwarn-incomplete-patterns
     dependencies:
     - tcc
 
 tests:
   tcc-test:
-    main:                LexTests.hs
+    main:                TestLauncher.hs
     source-dirs:         test
     ghc-options:
     - -threaded

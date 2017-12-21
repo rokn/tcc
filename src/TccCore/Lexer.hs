@@ -12,7 +12,7 @@ import TccCore.Helpers
 import Text.Regex.Posix
 
 
-splitters = "(){}; "
+splitters = "(){}; \n\t"
 
 keywordRegexes = map (\k -> (k, getKeywordRegex k)) allKeywords
 
@@ -28,17 +28,20 @@ tccLex code = lexSplitted (code `splitBy` splitters)
 
 lexSplitted :: [String] -> [Token]
 lexSplitted [] = []
-lexSplitted (" " : rest) = lexSplitted rest
-lexSplitted (""  : rest) = lexSplitted rest
-lexSplitted ("{" : rest) = OpenBrace        : lexSplitted rest
-lexSplitted ("}" : rest) = CloseBrace       : lexSplitted rest
-lexSplitted ("(" : rest) = OpenParenthesis  : lexSplitted rest
-lexSplitted (")" : rest) = CloseParenthesis : lexSplitted rest
-lexSplitted (";" : rest) = SemiColon        : lexSplitted rest
-lexSplitted (lx  : rest)
-  | isKeyword    = KeywordToken keyword : lexSplitted rest
-  | isIdentifier = Identifier identifier       : lexSplitted rest
-  | isLiteral    = NumberLiteral literal       : lexSplitted rest
+lexSplitted (" "  : rest) = lexSplitted rest
+lexSplitted (""   : rest) = lexSplitted rest
+lexSplitted ("\n" : rest) = lexSplitted rest
+lexSplitted ("\t" : rest) = lexSplitted rest
+lexSplitted ("{"  : rest) = OpenBrace        : lexSplitted rest
+lexSplitted ("}"  : rest) = CloseBrace       : lexSplitted rest
+lexSplitted ("("  : rest) = OpenParenthesis  : lexSplitted rest
+lexSplitted (")"  : rest) = CloseParenthesis : lexSplitted rest
+lexSplitted (";"  : rest) = SemiColon        : lexSplitted rest
+lexSplitted (lx   : rest)
+  | isKeyword    = KeywordToken keyword  : lexSplitted rest
+  | isIdentifier = Identifier identifier : lexSplitted rest
+  | isLiteral    = NumberLiteral literal : lexSplitted rest
+  | otherwise    = lexSplitted rest
   where (isKeyword, keyword)       = checkForKeyword lx
         (isIdentifier, identifier) = checkForIdentifier lx
         (isLiteral, literal)       = checkForLiteral lx
