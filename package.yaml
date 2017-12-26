@@ -35,7 +35,6 @@ executables:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
-    - -fwarn-incomplete-patterns
     dependencies:
     - tcc
 
