@@ -10,6 +10,7 @@ import TccCore.Keyword
 import TccCore.Helpers
 
 import Text.Regex.Posix
+import Text.Read
 
 
 splitters = "(){}; \n\t"
@@ -53,4 +54,9 @@ checkForKeyword lexeme = checkForKeyword' keywordRegexes
             | otherwise = checkForKeyword' pats
 
 checkForIdentifier lexeme = ((lexeme =~ identifierPattern) :: Bool, lexeme)
-checkForLiteral lexeme    = ((lexeme =~ literalPattern) :: Bool,    lexeme)
+checkForLiteral lexeme
+    | not isLiteral = (False, 0)
+    | isLiteral =  case readMaybe lexeme of
+                     Just n -> (True, n)
+                     Nothing -> (False, 0)
+    where isLiteral = (lexeme =~ literalPattern) :: Bool

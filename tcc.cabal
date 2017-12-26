@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0094f7c2174773f24a8029dd119b5ddd2b68c8088a63f06d28616b8b405a1d29
+-- hash: 6f3bbaae8bc8fbaffd36be2e55d31a618104f8bfe5843650f0288cdbed8e67a8
 
 name:           tcc
 version:        0.1.0.0
@@ -34,9 +34,11 @@ library
       base >=4.7 && <5
     , regex-posix
   exposed-modules:
+      TccCore.AST
       TccCore.Helpers
       TccCore.Keyword
       TccCore.Lexer
+      TccCore.Parser
       TccCore.Token
   other-modules:
       Paths_tcc
@@ -69,5 +71,6 @@ test-suite tcc-test
     , tcc
   other-modules:
       LexTests
+      ParseTests
       Paths_tcc
   default-language: Haskell2010

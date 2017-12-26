@@ -59,7 +59,7 @@ lexTests = [
             CloseParenthesis,
             OpenBrace,
             KeywordToken Return,
-            NumberLiteral "2",
+            NumberLiteral 2,
             SemiColon,
             CloseBrace
          ]
@@ -87,7 +87,7 @@ lexTests = [
             CloseParenthesis,
             OpenBrace,
             KeywordToken Return,
-            NumberLiteral "0",
+            NumberLiteral 0,
             SemiColon,
             CloseBrace
          ]
@@ -102,7 +102,7 @@ lexTests = [
             CloseParenthesis,
             OpenBrace,
             KeywordToken Return,
-            NumberLiteral "123456789",
+            NumberLiteral 123456789,
             SemiColon,
             CloseBrace
          ]
@@ -117,7 +117,7 @@ lexTests = [
             CloseParenthesis,
             OpenBrace,
             KeywordToken Return,
-            NumberLiteral "37",
+            NumberLiteral 37,
             SemiColon,
             CloseBrace
          ]
@@ -133,7 +133,7 @@ lexTests = [
             CloseParenthesis,
             OpenBrace,
             KeywordToken Return,
-            NumberLiteral "37",
+            NumberLiteral 37,
             SemiColon,
             CloseBrace
          ]
@@ -148,7 +148,7 @@ lexTests = [
             CloseParenthesis,
             OpenBrace,
             KeywordToken Return,
-            NumberLiteral "37",
+            NumberLiteral 37,
             SemiColon,
             CloseBrace
          ]
@@ -163,7 +163,7 @@ lexTests = [
             CloseParenthesis,
             OpenBrace,
             KeywordToken Return,
-            NumberLiteral "37",
+            NumberLiteral 37,
             SemiColon,
             CloseBrace
          ]
@@ -178,7 +178,7 @@ lexTests = [
             CloseParenthesis,
             OpenBrace,
             KeywordToken Return,
-            NumberLiteral "0x37",
+            NumberLiteral 0x37,
             SemiColon,
             CloseBrace
          ]
@@ -193,7 +193,7 @@ lexTests = [
             CloseParenthesis,
             OpenBrace,
             KeywordToken Return,
-            NumberLiteral "0x0",
+            NumberLiteral 0x0,
             SemiColon,
             CloseBrace
          ]
@@ -208,7 +208,7 @@ lexTests = [
             CloseParenthesis,
             OpenBrace,
             KeywordToken Return,
-            NumberLiteral "0xAF37",
+            NumberLiteral 0xAF37,
             SemiColon,
             CloseBrace
          ]
@@ -223,7 +223,7 @@ lexTests = [
             CloseParenthesis,
             OpenBrace,
             KeywordToken Return,
-            NumberLiteral "0xCAFECAFE",
+            NumberLiteral 0xCAFECAFE,
             SemiColon,
             CloseBrace
          ]
@@ -238,7 +238,7 @@ lexTests = [
             CloseParenthesis,
             OpenBrace,
             KeywordToken Return,
-            NumberLiteral "0x00000",
+            NumberLiteral 0x00000,
             SemiColon,
             CloseBrace
          ]
