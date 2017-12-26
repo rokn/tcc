@@ -1,7 +1,8 @@
 module TccCore.Parser
     (
     tccParse,
-    ParseError
+    ParseError,
+    parseFunction
     ) where
 
 import TccCore.AST
@@ -10,38 +11,34 @@ import TccCore.Keyword
 
 type ParseError = String
 
--- data Expectation =
---     Single Token
---   | Multiple [Expectation]
-
--- ExpressionExpect = Single NumberLiteral
-
 tccParse :: [Token] -> Either [ParseError] Program
-tccParse = undefined
--- tccParse tokens = case getDeclarations tokens of
---                     Left errors        -> Left errors
---                     Right declarations -> Right (Program declarations)
-
--- getDeclarations tokens = getDeclarations' tokens []
---     where getDeclarations' [] decs = Right decs
---           getDeclarations' (t:ts) decs =
---               case t of
---                 Identifier "int" -> (getFunction ts):decs
---                 _                -> Left ["Expected type identifier"]
-
-getFunction ((Identifier fType):
-             (Identifier fName):
-              OpenParenthesis  :
-              CloseParenthesis :
-              rest) = getBlock rest >>= \(block,tks) -> return $ (Function (fName, block), tks)
-
-getFunction _ = Left ["Expected function declaration"]
+tccParse [] = Left ["Unexpected EOF"]
+tccParse tokens = parseDeclarations tokens
+                    >>= \decs -> return $ Program decs
 
 
+parseDeclarations :: [Token] -> Either [ParseError] [Function]
+parseDeclarations tokens = parseDeclarations' tokens []
+    where parseDeclarations' :: [Token] -> [Function] -> Either [ParseError] [Function]
+          parseDeclarations' [] res     = Right (reverse res)
+          parseDeclarations' tokens res = parseFunction tokens
+                                            >>= \(func, tks) -> parseDeclarations' tks (func:res)
 
-getBlock (OpenBrace:rest) = parseStatements rest
+
+parseFunction :: [Token] -> Either [ParseError] (Function, [Token])
+parseFunction ((Identifier fType):
+               (Identifier fName):
+                OpenParenthesis  :
+                CloseParenthesis :
+                rest) = parseBlock rest >>= \(block,tks) -> return $ (Function (fName, block), tks)
+
+parseFunction _ = Left ["Expected function declaration"]
+
+
+
+parseBlock (OpenBrace:rest) = parseStatements rest
                                 >>= \(stmts, tks) -> return $ (Block stmts, tks)
-getBlock _ = Left ["Expected an opening brace"]
+parseBlock _ = Left ["Expected an opening brace"]
 
 
 
