@@ -1,24 +1,25 @@
-module LexTests where
+module ParseTests where
 
-import TccCore.Lexer
+import TccCore.Parser
 import TccCore.Keyword
 import TccCore.Token
+import TccCore.AST
+import qualified TccCore.ParserErrors as PErr
 
 import Test.Tasty
 import Test.Tasty.HUnit
 
-data LexTest = LexTest {
+data ParseTest = ParseTest {
     description :: String,
-    code        :: String,
-    tokens      :: [Token]
+    tokens      :: [Token],
+    output     :: Either [PErr.ParseError] Program
 }
 
 
 
-lexTests = [
-    LexTest {
+parseTests = [
+    ParseTest {
         description = "Minimal program",
-        code = "int main(){}",
         tokens = [
             Identifier "int",
             Identifier "main",
@@ -26,18 +27,14 @@ lexTests = [
             CloseParenthesis,
             OpenBrace,
             CloseBrace
-         ]
+         ],
+         output = Right (Program
+         [
+            Function ("main", Block [])
+         ])
     },
-    LexTest {
-        description = "Simple identifier",
-        code = "int",
-        tokens = [
-            Identifier "int"
-         ]
-    },
-    LexTest {
+    ParseTest {
         description = "Main with return(No Literal)",
-        code = "int main(){\nreturn;\n}",
         tokens = [
             Identifier "int",
             Identifier "main",
@@ -47,11 +44,11 @@ lexTests = [
             KeywordToken Return,
             SemiColon,
             CloseBrace
-         ]
+         ],
+         output = Left [PErr.missingStatement]
     },
-    LexTest {
+    ParseTest {
         description = "Main with return(With Literal)",
-        code = "int main(){\nreturn 2;\n}",
         tokens = [
             Identifier "int",
             Identifier "main",
@@ -62,24 +59,18 @@ lexTests = [
             NumberLiteral 2,
             SemiColon,
             CloseBrace
-         ]
+         ],
+         output = Right (Program
+         [
+            Function ("main", Block
+            [
+                ReturnStatement (Constant 2)
+            ])
+         ])
+
     },
-    LexTest {
-        description = "MissingSpaces",
-        code = "intmain(){return2;}",
-        tokens = [
-            Identifier "intmain",
-            OpenParenthesis,
-            CloseParenthesis,
-            OpenBrace,
-            Identifier "return2",
-            SemiColon,
-            CloseBrace
-         ]
-    },
-    LexTest {
+    ParseTest {
         description = "Main with return(With Literal 0)",
-        code = "int main(){\nreturn 0;\n}",
         tokens = [
             Identifier "int",
             Identifier "main",
@@ -90,11 +81,17 @@ lexTests = [
             NumberLiteral 0,
             SemiColon,
             CloseBrace
-         ]
+         ],
+         output = Right (Program
+         [
+            Function ("main", Block
+            [
+                ReturnStatement (Constant 0)
+            ])
+         ])
     },
-    LexTest {
+    ParseTest {
         description = "Main with return(With Literal 123456789)",
-        code = "int main(){\nreturn 123456789;\n}",
         tokens = [
             Identifier "int",
             Identifier "main",
@@ -105,72 +102,17 @@ lexTests = [
             NumberLiteral 123456789,
             SemiColon,
             CloseBrace
-         ]
+         ],
+         output = Right (Program
+         [
+            Function ("main", Block
+            [
+                ReturnStatement (Constant 123456789)
+            ])
+         ])
     },
-    LexTest {
-        description = "Lotsa spaces",
-        code = "    int    main    (  )  {\nreturn    37   ;    }  ",
-        tokens = [
-            Identifier "int",
-            Identifier "main",
-            OpenParenthesis,
-            CloseParenthesis,
-            OpenBrace,
-            KeywordToken Return,
-            NumberLiteral 37,
-            SemiColon,
-            CloseBrace
-         ]
-    },
-    LexTest {
-        description = "Lotsa new lines",
-        code = "\n\n\n\nint\n\n\n\nmain\n\n\n\n(\n\n\n\n) \
-              \ \n\n\n\n{\nreturn\n\n\n\n37\n\n\n\n;\n\n\n\n}\n\n\n\n",
-        tokens = [
-            Identifier "int",
-            Identifier "main",
-            OpenParenthesis,
-            CloseParenthesis,
-            OpenBrace,
-            KeywordToken Return,
-            NumberLiteral 37,
-            SemiColon,
-            CloseBrace
-         ]
-    },
-    LexTest {
-        description = "Tabs test",
-        code = "int main() {\n\treturn 37;\n}",
-        tokens = [
-            Identifier "int",
-            Identifier "main",
-            OpenParenthesis,
-            CloseParenthesis,
-            OpenBrace,
-            KeywordToken Return,
-            NumberLiteral 37,
-            SemiColon,
-            CloseBrace
-         ]
-    },
-    LexTest {
-        description = "More tabs test",
-        code = "\tint \t\tmain(\t) \t\t{\n\t\treturn \t37;\t\n}",
-        tokens = [
-            Identifier "int",
-            Identifier "main",
-            OpenParenthesis,
-            CloseParenthesis,
-            OpenBrace,
-            KeywordToken Return,
-            NumberLiteral 37,
-            SemiColon,
-            CloseBrace
-         ]
-    },
-    LexTest {
+    ParseTest {
         description = "Hex literals",
-        code = "int main() {\n\treturn 0x37;\n}",
         tokens = [
             Identifier "int",
             Identifier "main",
@@ -181,11 +123,17 @@ lexTests = [
             NumberLiteral 0x37,
             SemiColon,
             CloseBrace
-         ]
+         ],
+         output = Right (Program
+         [
+            Function ("main", Block
+            [
+                ReturnStatement (Constant 0x37)
+            ])
+         ])
     },
-    LexTest {
+    ParseTest {
         description = "Hex literals 0",
-        code = "int main() {\n\treturn 0x0;\n}",
         tokens = [
             Identifier "int",
             Identifier "main",
@@ -196,11 +144,17 @@ lexTests = [
             NumberLiteral 0x0,
             SemiColon,
             CloseBrace
-         ]
+         ],
+         output = Right (Program
+         [
+            Function ("main", Block
+            [
+                ReturnStatement (Constant 0x0)
+            ])
+         ])
     },
-    LexTest {
+    ParseTest {
         description = "Hex literals AF37",
-        code = "int main() {\n\treturn 0xAF37;\n}",
         tokens = [
             Identifier "int",
             Identifier "main",
@@ -211,11 +165,78 @@ lexTests = [
             NumberLiteral 0xAF37,
             SemiColon,
             CloseBrace
-         ]
+         ],
+         output = Right (Program
+         [
+            Function ("main", Block
+            [
+                ReturnStatement (Constant 0xAF37)
+            ])
+         ])
     },
-    LexTest {
-        description = "Hex literals CAFECAFE",
-        code = "int main() {\n\treturn 0xCAFECAFE;\n}",
+    ParseTest {
+        description = "Empty file",
+        tokens = [],
+         output = Left [PErr.unexpectedEof]
+    },
+    ParseTest {
+        description = "Missing function name",
+        tokens = [
+            Identifier "int",
+            OpenParenthesis,
+            CloseParenthesis,
+            OpenBrace,
+            KeywordToken Return,
+            NumberLiteral 0xAF37,
+            SemiColon,
+            CloseBrace
+         ],
+         output = Left [PErr.missingFuncDeclaration]
+    },
+    ParseTest {
+        description = "Missing function open parenthesis",
+        tokens = [
+            Identifier "int",
+            Identifier "main",
+            CloseParenthesis,
+            OpenBrace,
+            KeywordToken Return,
+            NumberLiteral 0xAF37,
+            SemiColon,
+            CloseBrace
+         ],
+         output = Left [PErr.missingFuncDeclaration]
+    },
+    ParseTest {
+        description = "Block missing open brace",
+        tokens = [
+            Identifier "int",
+            Identifier "main",
+            OpenParenthesis,
+            CloseParenthesis,
+            KeywordToken Return,
+            NumberLiteral 0xAF37,
+            SemiColon,
+            CloseBrace
+         ],
+         output = Left [PErr.missingOpenBrace]
+    },
+    ParseTest {
+        description = "Missing return",
+        tokens = [
+            Identifier "int",
+            Identifier "main",
+            OpenParenthesis,
+            CloseParenthesis,
+            OpenBrace,
+            NumberLiteral 0xAF37,
+            SemiColon,
+            CloseBrace
+         ],
+         output = Left [PErr.missingStatement]
+    },
+    ParseTest {
+        description = "Missing closing brace",
         tokens = [
             Identifier "int",
             Identifier "main",
@@ -223,34 +244,19 @@ lexTests = [
             CloseParenthesis,
             OpenBrace,
             KeywordToken Return,
-            NumberLiteral 0xCAFECAFE,
-            SemiColon,
-            CloseBrace
-         ]
-    },
-    LexTest {
-        description = "Hex literals 00000",
-        code = "int main() {\n\treturn 0x00000;\n}",
-        tokens = [
-            Identifier "int",
-            Identifier "main",
-            OpenParenthesis,
-            CloseParenthesis,
-            OpenBrace,
-            KeywordToken Return,
-            NumberLiteral 0x00000,
-            SemiColon,
-            CloseBrace
-         ]
+            NumberLiteral 0xAF37,
+            SemiColon
+         ],
+         output = Left [PErr.missingCloseBrace]
     }
     ]
 
-testCases = map toTestCase lexTests
+testCases = map toTestCase parseTests
 
-toTestCase lexTest =
-    testCase (description lexTest) $
-        assertEqual "Lexer should give correct tokens"
-            (tokens lexTest)
-            (tccLex $ code lexTest)
+toTestCase parseTest =
+    testCase (description parseTest) $
+        assertEqual "Parser should generate correct AST"
+            (output parseTest)
+            (tccParse $ tokens parseTest)
 
-tests = testGroup "Lexer tests" testCases
+tests = testGroup "Parser tests" testCases
