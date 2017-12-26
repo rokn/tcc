@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0094f7c2174773f24a8029dd119b5ddd2b68c8088a63f06d28616b8b405a1d29
+-- hash: c7e728ee0b3f853174d5470134983eedddc6228473276b1f19d97ad4d31434f1
 
 name:           tcc
 version:        0.1.0.0
@@ -34,6 +34,7 @@ library
       base >=4.7 && <5
     , regex-posix
   exposed-modules:
+      TccCore.CodeGen
       TccCore.Helpers
       TccCore.Keyword
       TccCore.Lexer
@@ -46,7 +47,7 @@ executable tcc-exe
   main-is: Main.hs
   hs-source-dirs:
       app
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N -fwarn-incomplete-patterns
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
     , regex-posix
