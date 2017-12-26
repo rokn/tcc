@@ -1,51 +1,47 @@
 module TccCore.Parser
     (
-    tccParse,
-    ParseError,
-    parseFunction
+    tccParse
     ) where
 
 import TccCore.AST
 import TccCore.Token
 import TccCore.Keyword
+import qualified TccCore.ParserErrors as PErr
 
-type ParseError = String
-
-tccParse :: [Token] -> Either [ParseError] Program
-tccParse [] = Left ["Unexpected EOF"]
+tccParse :: [Token] -> Either [PErr.ParseError] Program
+tccParse [] = Left [PErr.unexpectedEof]
 tccParse tokens = parseDeclarations tokens
                     >>= \decs -> return $ Program decs
 
 
-parseDeclarations :: [Token] -> Either [ParseError] [Function]
+parseDeclarations :: [Token] -> Either [PErr.ParseError] [Function]
 parseDeclarations tokens = parseDeclarations' tokens []
-    where parseDeclarations' :: [Token] -> [Function] -> Either [ParseError] [Function]
-          parseDeclarations' [] res     = Right (reverse res)
+    where parseDeclarations' [] res     = Right (reverse res)
           parseDeclarations' tokens res = parseFunction tokens
                                             >>= \(func, tks) -> parseDeclarations' tks (func:res)
 
 
-parseFunction :: [Token] -> Either [ParseError] (Function, [Token])
+parseFunction :: [Token] -> Either [PErr.ParseError] (Function, [Token])
 parseFunction ((Identifier fType):
                (Identifier fName):
                 OpenParenthesis  :
                 CloseParenthesis :
                 rest) = parseBlock rest >>= \(block,tks) -> return $ (Function (fName, block), tks)
-
-parseFunction _ = Left ["Expected function declaration"]
-
+parseFunction _ = Left [PErr.missingFuncDeclaration]
 
 
+parseBlock :: [Token] -> Either [PErr.ParseError] (Block, [Token])
 parseBlock (OpenBrace:rest) = parseStatements rest
                                 >>= \(stmts, tks) -> return $ (Block stmts, tks)
-parseBlock _ = Left ["Expected an opening brace"]
+parseBlock _ = Left [PErr.missingOpenBrace]
 
 
-
+parseStatements :: [Token] -> Either [PErr.ParseError] ([Statement], [Token])
 parseStatements tokens = parseStatements' tokens []
-    where parseStatements' [] res = Left ["Expected a closing brace"]
+    where parseStatements' [] res = Left [PErr.missingCloseBrace]
           parseStatements' (CloseBrace:rest) res = Right (reverse res, rest)
           parseStatements' ((KeywordToken Return):
                             (NumberLiteral numb) :
-                            SemiColon            :
-                            rest) res = parseStatements' rest ((getReturn numb):res)
+                             SemiColon : rest) res =
+                                parseStatements' rest ((getReturn numb):res)
+          parseStatements' _ _ = Left [PErr.missingStatement]
