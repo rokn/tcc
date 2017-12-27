@@ -22,13 +22,16 @@ description:         Please see the README on Github at <https://github.com/rokn
 dependencies:
 - base >= 4.7 && < 5
 - regex-posix
+- filepath
+- directory
+- process
 
 library:
   source-dirs: src
 
 
 executables:
-  tcc-exe:
+  tcc:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
