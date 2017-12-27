@@ -11,8 +11,8 @@ extra-source-files:
 - ChangeLog.md
 
 # Metadata used when publishing your package
-synopsis:            Short description of your package
-# category:            Web
+synopsis:            C compiler
+category:            Compiler
 
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
@@ -21,12 +21,17 @@ description:         Please see the README on Github at <https://github.com/rokn
 
 dependencies:
 - base >= 4.7 && < 5
+- regex-posix
+- filepath
+- directory
+- process
 
 library:
   source-dirs: src
 
+
 executables:
-  tcc-exe:
+  tcc:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -38,7 +43,7 @@ executables:
 
 tests:
   tcc-test:
-    main:                Spec.hs
+    main:                TestLauncher.hs
     source-dirs:         test
     ghc-options:
     - -threaded
@@ -46,3 +51,5 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - tcc
+    - tasty
+    - tasty-hunit
