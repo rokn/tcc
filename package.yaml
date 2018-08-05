@@ -25,6 +25,7 @@ dependencies:
 - filepath
 - directory
 - process
+- MonadParser
 
 library:
   source-dirs: src

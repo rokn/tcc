@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ec6daed9ec520111b9a9efbc3908a3e59a2585aeb86ccbbe34cf120ef9feefd0
+-- hash: 68cb733eed544dfdc777e1678ad34df26cf20b2dd8cc5392303298e8b800f20d
 
 name:           tcc
 version:        0.1.0.0
@@ -31,7 +31,8 @@ library
   hs-source-dirs:
       src
   build-depends:
-      base >=4.7 && <5
+      MonadParser
+    , base >=4.7 && <5
     , directory
     , filepath
     , process
@@ -56,7 +57,8 @@ executable tcc
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      MonadParser
+    , base >=4.7 && <5
     , directory
     , filepath
     , process
@@ -73,7 +75,8 @@ test-suite tcc-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      MonadParser
+    , base >=4.7 && <5
     , directory
     , filepath
     , process
