@@ -15,7 +15,7 @@ data Block = Block [Statement]
 data Statement = ReturnStatement Expression
     deriving(Show, Eq)
 
-data Expression = Constant Integer
+data Expression = Constant Int
     deriving(Show, Eq)
 
 getReturn n = ReturnStatement (Constant n)

@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 68cb733eed544dfdc777e1678ad34df26cf20b2dd8cc5392303298e8b800f20d
+-- hash: 6f0f56667f9ad9e30942b8c4b6a74e639c03e888345d3a52ed376bde1bce0895
 
 name:           tcc
 version:        0.1.0.0
@@ -42,9 +42,8 @@ library
       TccCore.CodeGen
       TccCore.Helpers
       TccCore.Keyword
-      TccCore.Lexer
-      TccCore.Parser
       TccCore.ParserErrors
+      TccCore.TccParser
       TccCore.Token
       TccExtra.Pretty
   other-modules:
